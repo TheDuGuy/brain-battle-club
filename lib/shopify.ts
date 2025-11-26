@@ -77,6 +77,8 @@ export interface Product {
       };
     }>;
   };
+  missionLabel?: string | null;
+  missionSlug?: string | null;
 }
 
 interface CollectionProductsResponse {
@@ -91,6 +93,46 @@ interface CollectionProductsResponse {
 
 interface ProductByHandleResponse {
   product: Product | null;
+}
+
+interface RawProduct {
+  id: string;
+  title: string;
+  handle: string;
+  description: string;
+  priceRange: {
+    minVariantPrice: {
+      amount: string;
+      currencyCode: string;
+    };
+  };
+  featuredImage?: {
+    url: string;
+    altText?: string;
+  };
+  variants?: {
+    edges: Array<{
+      node: {
+        id: string;
+        title: string;
+        priceV2: {
+          amount: string;
+          currencyCode: string;
+        };
+      };
+    }>;
+  };
+  metafieldMissionLabel?: { value: string } | null;
+  metafieldMissionSlug?: { value: string } | null;
+}
+
+function mapRawProduct(raw: RawProduct): Product {
+  return {
+    ...raw,
+    variants: raw.variants ?? { edges: [] },
+    missionLabel: raw.metafieldMissionLabel?.value ?? null,
+    missionSlug: raw.metafieldMissionSlug?.value ?? null,
+  };
 }
 
 export async function getKits(): Promise<Product[]> {
@@ -114,6 +156,12 @@ export async function getKits(): Promise<Product[]> {
                 url
                 altText
               }
+              metafieldMissionLabel: metafield(namespace: "bbc", key: "mission_label") {
+                value
+              }
+              metafieldMissionSlug: metafield(namespace: "bbc", key: "mission_slug") {
+                value
+              }
             }
           }
         }
@@ -127,7 +175,7 @@ export async function getKits(): Promise<Product[]> {
     return [];
   }
 
-  return data.collection.products.edges.map((edge) => edge.node);
+  return data.collection.products.edges.map((edge) => mapRawProduct(edge.node as unknown as RawProduct));
 }
 
 export async function getProductByHandle(handle: string): Promise<Product | null> {
@@ -160,14 +208,20 @@ export async function getProductByHandle(handle: string): Promise<Product | null
             }
           }
         }
+        metafieldMissionLabel: metafield(namespace: "bbc", key: "mission_label") {
+          value
+        }
+        metafieldMissionSlug: metafield(namespace: "bbc", key: "mission_slug") {
+          value
+        }
       }
     }
   `;
 
-  const data = await shopifyFetch<ProductByHandleResponse>({
+  const data = await shopifyFetch<{ product: RawProduct | null }>({
     query,
     variables: { handle },
   });
 
-  return data.product;
+  return data.product ? mapRawProduct(data.product) : null;
 }

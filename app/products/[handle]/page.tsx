@@ -5,7 +5,9 @@ import { getProductByHandle } from '@/lib/shopify';
 import { getCartIdFromCookie, setCartIdCookie } from '@/lib/cart-cookie';
 import { createCart, addLinesToCart, getCart } from '@/lib/cart';
 import { getBundleInfo } from '@/lib/bundles';
+import { getMission, getMissionColorClasses } from '@/lib/missions';
 import { IconCheck } from '@/components/CategoryIcons';
+import { MissionBadge } from '@/components/MissionBadge';
 
 async function addToCartAction(formData: FormData) {
   'use server';
@@ -54,6 +56,8 @@ export default async function ProductPage({
 
   const bundle = getBundleInfo(product.handle);
   const firstVariant = product.variants.edges[0]?.node;
+  const mission = product.missionSlug ? getMission(product.missionSlug) : null;
+  const missionColors = mission ? getMissionColorClasses(mission.color) : null;
 
   if (!firstVariant) {
     return (
@@ -114,6 +118,21 @@ export default async function ProductPage({
           {/* Product Details */}
           <div className="flex flex-col">
             <h1 className="text-3xl font-bold text-text-primary mb-3">{product.title}</h1>
+
+            {/* Mission Badge + Link */}
+            {product.missionLabel && (
+              <div className="mt-2 mb-4 flex flex-col gap-1">
+                <MissionBadge label={product.missionLabel} size="lg" color={mission?.color} />
+                {product.missionSlug && (
+                  <Link
+                    href={`/missions/${product.missionSlug}`}
+                    className={`text-sm ${missionColors?.text ?? 'text-brand-purple'} hover:underline`}
+                  >
+                    Learn more about this mission →
+                  </Link>
+                )}
+              </div>
+            )}
 
             {/* Simplified Badges */}
             {bundle && (
@@ -204,6 +223,54 @@ export default async function ProductPage({
                       {tag}
                     </span>
                   ))}
+                </div>
+              </div>
+            )}
+
+            {/* How This Mission Works */}
+            {mission && missionColors && product.missionSlug && (
+              <div className={`border-t border-gray-200 pt-6 mt-6`}>
+                <div className={`rounded-xl ${missionColors.bgLight} border ${missionColors.border} p-5`}>
+                  <div className="flex items-start gap-4">
+                    <div className={`flex-shrink-0 w-10 h-10 rounded-lg ${missionColors.bg} flex items-center justify-center`}>
+                      <svg
+                        className="w-5 h-5 text-white"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M13 10V3L4 14h7v7l9-11h-7z"
+                        />
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-base font-bold text-text-primary mb-1">
+                        How this mission works
+                      </h3>
+                      <p className="text-sm text-text-secondary mb-3">
+                        {mission.shortDescription}
+                      </p>
+                      <Link
+                        href={`/missions/${product.missionSlug}`}
+                        className={`inline-flex items-center text-sm font-semibold ${missionColors.text} hover:underline`}
+                      >
+                        Learn more
+                        <svg
+                          className="w-4 h-4 ml-1"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                        </svg>
+                      </Link>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}

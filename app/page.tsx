@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { getKits } from '@/lib/shopify';
 import { getBundleInfo } from '@/lib/bundles';
+import { getMission } from '@/lib/missions';
 import {
   IconAll,
   IconBundles,
@@ -20,6 +21,7 @@ import {
   IconPalette,
   IconBottle,
 } from '@/components/CategoryIcons';
+import { MissionBadge } from '@/components/MissionBadge';
 
 export default async function Home() {
   const kits = await getKits();
@@ -184,6 +186,7 @@ export default async function Home() {
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {kits.map((kit, index) => {
                   const bundle = getBundleInfo(kit.handle);
+                  const mission = kit.missionSlug ? getMission(kit.missionSlug) : null;
 
                   // Brand tinted backgrounds
                   const bgColors = [
@@ -218,6 +221,9 @@ export default async function Home() {
 
                         {/* Simplified Badges */}
                         <div className="absolute top-3 left-3 flex flex-col gap-1.5">
+                          {kit.missionLabel && (
+                            <MissionBadge label={kit.missionLabel} size="sm" color={mission?.color} />
+                          )}
                           {bundle ? (
                             <span className="inline-flex items-center rounded-full bg-primary text-white px-2.5 py-1 text-xs font-semibold">
                               Bundle
