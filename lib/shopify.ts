@@ -308,3 +308,60 @@ export async function getProductByHandle(handle: string): Promise<Product | null
 
   return data.product ? mapRawProduct(data.product) : null;
 }
+
+/**
+ * Search products using Shopify's search
+ */
+export async function searchProducts(
+  searchQuery: string,
+  options?: { first?: number }
+): Promise<Product[]> {
+  const first = options?.first ?? 20;
+
+  // Return empty if no search query
+  if (!searchQuery.trim()) {
+    return [];
+  }
+
+  const query = `
+    query SearchProducts($query: String!, $first: Int!) {
+      products(first: $first, query: $query) {
+        edges {
+          node {
+            id
+            title
+            handle
+            description
+            priceRange {
+              minVariantPrice {
+                amount
+                currencyCode
+              }
+            }
+            featuredImage {
+              url
+              altText
+            }
+            metafieldMissionLabel: metafield(namespace: "bbc", key: "mission_label") {
+              value
+            }
+            metafieldMissionSlug: metafield(namespace: "bbc", key: "mission_slug") {
+              value
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  const data = await shopifyFetch<{
+    products: {
+      edges: Array<{ node: RawProduct }>;
+    };
+  }>({
+    query,
+    variables: { query: searchQuery, first },
+  });
+
+  return data.products.edges.map((edge) => mapRawProduct(edge.node));
+}
