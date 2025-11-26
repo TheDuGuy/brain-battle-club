@@ -1,36 +1,128 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Brain Battle Club
+
+A modern e-commerce storefront for educational toys and learning kits, built with Next.js 14 and Shopify Storefront API.
+
+## Features
+
+- 🛍️ Custom storefront with Shopify backend
+- 📦 Product catalog from Shopify collections
+- 🎨 Tailwind CSS styling
+- ⚡ Server-side rendering with Next.js 14
+- 🔒 Type-safe with TypeScript
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+ installed
+- A Shopify store with Storefront API access
+- Products organized in a "kits" collection
+
+### Setup
+
+1. **Clone and install dependencies:**
+
+```bash
+npm install
+```
+
+2. **Configure environment variables:**
+
+Copy `.env.local.example` to `.env.local`:
+
+```bash
+cp .env.local.example .env.local
+```
+
+Then fill in your Shopify credentials:
+
+```env
+SHOPIFY_STORE_DOMAIN=your-store.myshopify.com
+SHOPIFY_STOREFRONT_API_TOKEN=your_storefront_api_token_here
+```
+
+### Getting Your Shopify Credentials
+
+1. Go to your Shopify Admin
+2. Navigate to **Settings > Apps and sales channels**
+3. Click **Develop apps**
+4. Create a new app or select an existing one
+5. Configure **Storefront API scopes** (enable product read access)
+6. Get your **Storefront API access token**
+
+### Create a "kits" Collection
+
+1. In Shopify Admin, go to **Products > Collections**
+2. Create a new collection with handle: `kits`
+3. Add your educational toy products to this collection
+
+### Run Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+brain-battle-club/
+├── app/
+│   ├── page.tsx              # Homepage - lists all kits
+│   └── products/
+│       └── [handle]/
+│           ├── page.tsx      # Product detail page
+│           └── not-found.tsx # 404 page
+├── lib/
+│   └── shopify.ts           # Shopify API helper functions
+└── .env.local.example       # Environment variables template
+```
 
-## Learn More
+## API Functions
 
-To learn more about Next.js, take a look at the following resources:
+### `getKits()`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Fetches all products from the "kits" collection.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```typescript
+const kits = await getKits();
+```
 
-## Deploy on Vercel
+### `getProductByHandle(handle)`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Fetches a single product by its URL handle.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```typescript
+const product = await getProductByHandle('stem-learning-kit');
+```
+
+## Coming Soon
+
+- 🛒 Shopping cart functionality
+- 💳 Checkout flow
+- 📦 Bundle builder (combine physical + digital products)
+- 📝 Blog and educational content sections
+- 🔗 Integration with 11+ learning app
+
+## Tech Stack
+
+- **Framework:** Next.js 14 (App Router)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS
+- **Backend:** Shopify Storefront API
+- **Deployment:** Vercel (recommended)
+
+## Deployment
+
+Deploy to Vercel with one click:
+
+```bash
+vercel
+```
+
+Make sure to add your environment variables in the Vercel dashboard.
+
+## License
+
+Private project for Brain Battle Club.

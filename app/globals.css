@@ -1,26 +1,76 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Brand colors from the infinity starburst logo */
+  --color-brand-pink: #E84A8A;
+  --color-brand-pink-light: #FDE7F1;
+  --color-brand-pink-dark: #D23670;
+
+  --color-brand-orange: #F59F2F;
+  --color-brand-orange-light: #FEF3E0;
+  --color-brand-orange-dark: #E88A1A;
+
+  --color-brand-yellow: #F8D34A;
+  --color-brand-yellow-light: #FEF9E7;
+  --color-brand-yellow-dark: #F0C030;
+
+  --color-brand-green: #7AC66C;
+  --color-brand-green-light: #EDF9EB;
+  --color-brand-green-dark: #5FB24F;
+
+  --color-brand-blue: #70C8F0;
+  --color-brand-blue-light: #E8F7FC;
+  --color-brand-blue-dark: #4BB8E8;
+
+  --color-brand-purple: #A55FEF;
+  --color-brand-purple-light: #F3EBFD;
+  --color-brand-purple-dark: #8F42E6;
+
+  --color-brand-navy: #233B99;
+  --color-brand-navy-light: #475569;
+  --color-brand-navy-dark: #1A2A6E;
+
+  /* Semantic aliases */
+  --color-primary: #A55FEF;
+  --color-primary-light: #F3EBFD;
+  --color-primary-dark: #8F42E6;
+
+  --color-secondary: #E84A8A;
+  --color-secondary-light: #FDE7F1;
+  --color-secondary-dark: #D23670;
+
+  --color-accent: #F59F2F;
+  --color-accent-light: #FEF3E0;
+  --color-accent-dark: #E88A1A;
+
+  --color-mission: #7AC66C;
+  --color-mission-light: #EDF9EB;
+  --color-mission-dark: #5FB24F;
+
+  /* Text colors */
+  --color-text-primary: #233B99;
+  --color-text-secondary: #475569;
+  --color-text-light: #64748B;
+
+  /* Shadows */
+  --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-soft-lg: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-soft-xl: 0 8px 32px rgba(0, 0, 0, 0.12);
+  --shadow-glow-purple: 0 0 20px rgba(139, 92, 246, 0.3);
+  --shadow-glow-pink: 0 0 20px rgba(236, 72, 153, 0.3);
+
+  /* Animations */
+  --animate-float: float 3s ease-in-out infinite;
+  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #ffffff;
+  color: #171717;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
