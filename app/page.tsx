@@ -1,8 +1,5 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { getKits } from '@/lib/shopify';
-import { getBundleInfo } from '@/lib/bundles';
-import { getMission } from '@/lib/missions';
 import {
   IconAll,
   IconBundles,
@@ -21,7 +18,7 @@ import {
   IconPalette,
   IconBottle,
 } from '@/components/CategoryIcons';
-import { MissionBadge } from '@/components/MissionBadge';
+import { ProductCard } from '@/components/ProductCard';
 
 export default async function Home() {
   const kits = await getKits();
@@ -64,18 +61,18 @@ export default async function Home() {
           <h2 className="text-2xl font-bold text-text-primary mb-8 text-center">Browse by Category</h2>
           <div className="flex flex-wrap justify-center gap-8">
             {[
-              { name: 'All Products', icon: IconAll, color: 'bg-brand-purple/10 text-brand-purple' },
-              { name: 'Bundles', icon: IconBundles, color: 'bg-brand-orange/10 text-brand-orange' },
-              { name: 'Maths', icon: IconMaths, color: 'bg-brand-blue/10 text-brand-blue' },
-              { name: 'Verbal Reasoning', icon: IconVerbal, color: 'bg-brand-pink/10 text-brand-pink' },
-              { name: 'Study Tools', icon: IconTools, color: 'bg-brand-green/10 text-brand-green' },
-              { name: 'Books', icon: IconBooks, color: 'bg-brand-yellow/10 text-brand-yellow-dark' },
+              { name: 'All Kits', icon: IconAll, color: 'bg-brand-purple/10 text-brand-purple', href: '/kits' },
+              { name: 'Bundles', icon: IconBundles, color: 'bg-brand-orange/10 text-brand-orange', href: '/bundles' },
+              { name: 'Maths', icon: IconMaths, color: 'bg-brand-blue/10 text-brand-blue', href: '/maths' },
+              { name: 'Verbal Reasoning', icon: IconVerbal, color: 'bg-brand-pink/10 text-brand-pink', href: '/verbal-reasoning' },
+              { name: 'Study Tools', icon: IconTools, color: 'bg-brand-green/10 text-brand-green', href: '/tools' },
+              { name: 'Books', icon: IconBooks, color: 'bg-brand-yellow/10 text-brand-yellow-dark', href: '#kits' },
             ].map((category) => {
               const IconComponent = category.icon;
               return (
-                <a
+                <Link
                   key={category.name}
-                  href="#kits"
+                  href={category.href}
                   className="group flex flex-col items-center gap-2 hover:scale-105 transition-transform"
                 >
                   <div className={`w-16 h-16 rounded-full ${category.color} flex items-center justify-center border border-gray-100`}>
@@ -84,7 +81,7 @@ export default async function Home() {
                   <span className="text-sm font-medium text-text-secondary group-hover:text-text-primary transition-colors">
                     {category.name}
                   </span>
-                </a>
+                </Link>
               );
             })}
           </div>
@@ -184,88 +181,9 @@ export default async function Home() {
               </div>
 
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {kits.map((kit, index) => {
-                  const bundle = getBundleInfo(kit.handle);
-                  const mission = kit.missionSlug ? getMission(kit.missionSlug) : null;
-
-                  // Brand tinted backgrounds
-                  const bgColors = [
-                    'bg-brand-purple/5',
-                    'bg-brand-blue/5',
-                    'bg-brand-orange/5',
-                    'bg-brand-green/5',
-                    'bg-brand-pink/5',
-                    'bg-brand-yellow/5',
-                  ];
-                  const bgColor = bgColors[index % bgColors.length];
-
-                  return (
-                    <Link
-                      key={kit.id}
-                      href={`/products/${kit.handle}`}
-                      className="group bg-white rounded-xl border border-gray-200 hover:shadow-lg transition-all overflow-hidden"
-                    >
-                      <div className={`aspect-square relative ${bgColor}`}>
-                        {kit.featuredImage ? (
-                          <Image
-                            src={kit.featuredImage.url}
-                            alt={kit.featuredImage.altText || kit.title}
-                            fill
-                            className="object-cover group-hover:scale-105 transition-transform duration-300"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-text-light">
-                            No Image
-                          </div>
-                        )}
-
-                        {/* Simplified Badges */}
-                        <div className="absolute top-3 left-3 flex flex-col gap-1.5">
-                          {kit.missionLabel && (
-                            <MissionBadge label={kit.missionLabel} slug={kit.missionSlug} size="sm" color={mission?.color} />
-                          )}
-                          {bundle ? (
-                            <span className="inline-flex items-center rounded-full bg-primary text-white px-2.5 py-1 text-xs font-semibold">
-                              Bundle
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center rounded-full bg-accent text-brand-navy px-2.5 py-1 text-xs font-semibold">
-                              Individual
-                            </span>
-                          )}
-                          {bundle?.includesAppAccess && (
-                            <span className="inline-flex items-center rounded-full bg-mission text-brand-navy px-2.5 py-1 text-xs font-semibold">
-                              + App
-                            </span>
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="p-5">
-                        <h3 className="text-lg font-bold text-text-primary mb-2">
-                          {kit.title}
-                        </h3>
-
-                        {/* Subject & Age Badges */}
-                        {bundle && (
-                          <div className="flex flex-wrap gap-1.5 mb-3">
-                            <span className="inline-flex items-center rounded-md bg-brand-purple/10 text-brand-purple px-2 py-0.5 text-xs font-medium border border-brand-purple/20">
-                              {bundle.subject}
-                            </span>
-                            <span className="inline-flex items-center rounded-md bg-brand-orange/10 text-brand-orange-dark px-2 py-0.5 text-xs font-medium border border-brand-orange/20">
-                              {bundle.ageRange}
-                            </span>
-                          </div>
-                        )}
-
-                        <p className="text-xl font-bold text-text-primary">
-                          {kit.priceRange.minVariantPrice.currencyCode}{' '}
-                          {parseFloat(kit.priceRange.minVariantPrice.amount).toFixed(2)}
-                        </p>
-                      </div>
-                    </Link>
-                  );
-                })}
+                {kits.map((kit, index) => (
+                  <ProductCard key={kit.id} product={kit} index={index} />
+                ))}
               </div>
             </>
           )}

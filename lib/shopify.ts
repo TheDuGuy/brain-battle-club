@@ -178,6 +178,89 @@ export async function getKits(): Promise<Product[]> {
   return data.collection.products.edges.map((edge) => mapRawProduct(edge.node as unknown as RawProduct));
 }
 
+// Collection type with metadata
+export interface Collection {
+  handle: string;
+  title: string;
+  description: string;
+  products: Product[];
+}
+
+interface CollectionResponse {
+  collection: {
+    handle: string;
+    title: string;
+    description: string;
+    products: {
+      edges: Array<{
+        node: RawProduct;
+      }>;
+    };
+  } | null;
+}
+
+/**
+ * Get a collection by its handle with all products
+ */
+export async function getCollectionByHandle(
+  handle: string,
+  options?: { first?: number }
+): Promise<Collection | null> {
+  const first = options?.first ?? 50;
+
+  const query = `
+    query GetCollectionByHandle($handle: String!, $first: Int!) {
+      collection(handle: $handle) {
+        handle
+        title
+        description
+        products(first: $first) {
+          edges {
+            node {
+              id
+              title
+              handle
+              description
+              priceRange {
+                minVariantPrice {
+                  amount
+                  currencyCode
+                }
+              }
+              featuredImage {
+                url
+                altText
+              }
+              metafieldMissionLabel: metafield(namespace: "bbc", key: "mission_label") {
+                value
+              }
+              metafieldMissionSlug: metafield(namespace: "bbc", key: "mission_slug") {
+                value
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  const data = await shopifyFetch<CollectionResponse>({
+    query,
+    variables: { handle, first },
+  });
+
+  if (!data.collection) {
+    return null;
+  }
+
+  return {
+    handle: data.collection.handle,
+    title: data.collection.title,
+    description: data.collection.description,
+    products: data.collection.products.edges.map((edge) => mapRawProduct(edge.node)),
+  };
+}
+
 export async function getProductByHandle(handle: string): Promise<Product | null> {
   const query = `
     query GetProductByHandle($handle: String!) {
