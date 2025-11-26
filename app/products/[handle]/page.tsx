@@ -7,7 +7,6 @@ import { createCart, addLinesToCart, getCart } from '@/lib/cart';
 import { getBundleInfo } from '@/lib/bundles';
 import { getMission, getMissionColorClasses } from '@/lib/missions';
 import { IconCheck } from '@/components/CategoryIcons';
-import { MissionBadge } from '@/components/MissionBadge';
 
 async function addToCartAction(formData: FormData) {
   'use server';
@@ -119,18 +118,29 @@ export default async function ProductPage({
           <div className="flex flex-col">
             <h1 className="text-3xl font-bold text-text-primary mb-3">{product.title}</h1>
 
-            {/* Mission Badge + Link */}
-            {product.missionLabel && (
-              <div className="mt-2 mb-4 flex flex-col gap-1">
-                <MissionBadge label={product.missionLabel} size="lg" color={mission?.color} />
-                {product.missionSlug && (
-                  <Link
-                    href={`/missions/${product.missionSlug}`}
-                    className={`text-sm ${missionColors?.text ?? 'text-brand-purple'} hover:underline`}
-                  >
-                    Learn more about this mission →
-                  </Link>
-                )}
+            {/* Linked Mission Panel */}
+            {product.missionLabel && product.missionSlug && mission && missionColors && (
+              <div className={`mt-4 mb-6 rounded-xl ${missionColors.bgLight} border ${missionColors.border} p-4`}>
+                <p className="text-xs font-semibold text-text-secondary uppercase tracking-wide mb-2">
+                  Linked Mission
+                </p>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className={`inline-flex items-center rounded-full ${missionColors.bg} text-white px-3 py-1 text-xs font-semibold`}>
+                    {mission.label}
+                  </span>
+                </div>
+                <p className="text-sm text-text-secondary mb-3">
+                  This kit unlocks the <span className="font-medium">{mission.label}</span> in the Brain Battle Academy app.
+                </p>
+                <Link
+                  href={`/missions/${product.missionSlug}`}
+                  className={`inline-flex items-center text-sm font-semibold ${missionColors.text} hover:underline`}
+                >
+                  See mission details
+                  <svg className="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
               </div>
             )}
 
@@ -252,7 +262,7 @@ export default async function ProductPage({
                         How this mission works
                       </h3>
                       <p className="text-sm text-text-secondary mb-3">
-                        {mission.shortDescription}
+                        {mission.tagline}
                       </p>
                       <Link
                         href={`/missions/${product.missionSlug}`}

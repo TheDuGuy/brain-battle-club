@@ -222,7 +222,7 @@ export default async function Home() {
                         {/* Simplified Badges */}
                         <div className="absolute top-3 left-3 flex flex-col gap-1.5">
                           {kit.missionLabel && (
-                            <MissionBadge label={kit.missionLabel} size="sm" color={mission?.color} />
+                            <MissionBadge label={kit.missionLabel} slug={kit.missionSlug} size="sm" color={mission?.color} />
                           )}
                           {bundle ? (
                             <span className="inline-flex items-center rounded-full bg-primary text-white px-2.5 py-1 text-xs font-semibold">
