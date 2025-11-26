@@ -203,89 +203,220 @@ export default async function ProductPage({
               </button>
             </form>
 
-            {/* What's Inside This Kit */}
-            {bundle && bundle.whatsInside && bundle.whatsInside.length > 0 && (
-              <div className="border-t border-gray-200 pt-6 mb-6">
-                <h2 className="text-lg font-bold text-text-primary mb-4">
-                  What&apos;s inside this kit
-                </h2>
-                <ul className="space-y-2">
-                  {bundle.whatsInside.map((item) => (
-                    <li key={item} className="flex items-start">
-                      <IconCheck className="w-4 h-4 text-mission mr-2 mt-0.5 flex-shrink-0" />
-                      <span className="text-text-secondary text-sm">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {/* Ideal For Tags */}
-            {bundle && bundle.idealFor && bundle.idealFor.length > 0 && (
-              <div className="border-t border-gray-200 pt-6">
-                <h3 className="text-lg font-bold text-text-primary mb-3">Perfect for</h3>
-                <div className="flex flex-wrap gap-1.5">
-                  {bundle.idealFor.map((tag) => (
-                    <span
-                      key={tag}
-                      className="inline-flex items-center rounded-md bg-brand-purple-light text-brand-purple px-2.5 py-1 text-xs font-medium border border-brand-purple/20"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* How This Mission Works */}
-            {mission && missionColors && product.missionSlug && (
-              <div className={`border-t border-gray-200 pt-6 mt-6`}>
-                <div className={`rounded-xl ${missionColors.bgLight} border ${missionColors.border} p-5`}>
-                  <div className="flex items-start gap-4">
-                    <div className={`flex-shrink-0 w-10 h-10 rounded-lg ${missionColors.bg} flex items-center justify-center`}>
-                      <svg
-                        className="w-5 h-5 text-white"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M13 10V3L4 14h7v7l9-11h-7z"
-                        />
-                      </svg>
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-base font-bold text-text-primary mb-1">
-                        How this mission works
-                      </h3>
-                      <p className="text-sm text-text-secondary mb-3">
-                        {mission.tagline}
-                      </p>
-                      <Link
-                        href={`/missions/${product.missionSlug}`}
-                        className={`inline-flex items-center text-sm font-semibold ${missionColors.text} hover:underline`}
-                      >
-                        Learn more
-                        <svg
-                          className="w-4 h-4 ml-1"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          strokeWidth={2}
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                        </svg>
-                      </Link>
-                    </div>
+            {/* Delivery & Returns Trust Block */}
+            <div className="border-t border-gray-200 pt-6">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex items-center gap-2">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-brand-green-light flex items-center justify-center">
+                    <svg className="w-4 h-4 text-brand-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
                   </div>
+                  <span className="text-xs text-text-secondary">Free UK delivery over £30</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-brand-blue-light flex items-center justify-center">
+                    <svg className="w-4 h-4 text-brand-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M16 15v-1a4 4 0 00-4-4H8m0 0l3 3m-3-3l3-3m9 14V5a2 2 0 00-2-2H6a2 2 0 00-2 2v16l4-2 4 2 4-2 4 2z" />
+                    </svg>
+                  </div>
+                  <span className="text-xs text-text-secondary">30-day easy returns</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-brand-purple-light flex items-center justify-center">
+                    <svg className="w-4 h-4 text-brand-purple" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <span className="text-xs text-text-secondary">Dispatched in 1–2 days</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-brand-orange-light flex items-center justify-center">
+                    <svg className="w-4 h-4 text-brand-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                  </div>
+                  <span className="text-xs text-text-secondary">Secure checkout</span>
                 </div>
               </div>
-            )}
+            </div>
           </div>
         </div>
+
+        {/* What's Inside This Kit - Visual Icon Grid */}
+        {bundle && bundle.whatsInside && bundle.whatsInside.length > 0 && (
+          <section className="mt-12 sm:mt-16">
+            <h2 className="text-2xl font-bold text-brand-navy mb-6">
+              What&apos;s inside this kit
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {bundle.whatsInside.map((item, index) => {
+                // Assign different colors to each item
+                const colorSchemes = [
+                  { bg: 'bg-brand-purple-light', icon: 'text-brand-purple', border: 'border-brand-purple/20' },
+                  { bg: 'bg-brand-green-light', icon: 'text-brand-green', border: 'border-brand-green/20' },
+                  { bg: 'bg-brand-orange-light', icon: 'text-brand-orange', border: 'border-brand-orange/20' },
+                  { bg: 'bg-brand-blue-light', icon: 'text-brand-blue', border: 'border-brand-blue/20' },
+                ];
+                const scheme = colorSchemes[index % colorSchemes.length];
+
+                return (
+                  <div
+                    key={item}
+                    className={`rounded-2xl ${scheme.bg} border ${scheme.border} p-4 sm:p-5 text-center`}
+                  >
+                    <div className={`w-12 h-12 mx-auto mb-3 rounded-xl bg-white/80 flex items-center justify-center shadow-soft`}>
+                      <svg className={`w-6 h-6 ${scheme.icon}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                      </svg>
+                    </div>
+                    <p className="text-sm font-medium text-text-primary leading-snug">{item}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        )}
+
+        {/* How It Works - Visual Flow Diagram */}
+        {bundle?.includesAppAccess && (
+          <section className="mt-12 sm:mt-16">
+            <h2 className="text-2xl font-bold text-brand-navy mb-6">
+              How it works
+            </h2>
+            <div className="rounded-2xl bg-gradient-to-br from-brand-purple/5 via-brand-blue/5 to-brand-green/5 border border-gray-200 p-6 sm:p-8">
+              <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 sm:gap-2">
+                {/* Step 1: Kit */}
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-brand-purple flex items-center justify-center mb-3 shadow-soft">
+                    <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                    </svg>
+                  </div>
+                  <p className="font-bold text-brand-navy text-sm mb-1">1. Get your kit</p>
+                  <p className="text-xs text-text-secondary">Physical tools delivered to your door</p>
+                </div>
+
+                {/* Arrow */}
+                <div className="hidden sm:flex items-center justify-center">
+                  <svg className="w-8 h-8 text-brand-purple/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </div>
+
+                {/* Step 2: Mission */}
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-brand-green flex items-center justify-center mb-3 shadow-soft">
+                    <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                    </svg>
+                  </div>
+                  <p className="font-bold text-brand-navy text-sm mb-1">2. Unlock mission</p>
+                  <p className="text-xs text-text-secondary">Scan QR code in the box</p>
+                </div>
+
+                {/* Arrow */}
+                <div className="hidden sm:flex items-center justify-center">
+                  <svg className="w-8 h-8 text-brand-green/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </div>
+
+                {/* Step 3: App */}
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-brand-blue flex items-center justify-center mb-3 shadow-soft">
+                    <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <p className="font-bold text-brand-navy text-sm mb-1">3. Use the app</p>
+                  <p className="text-xs text-text-secondary">Short guided sessions</p>
+                </div>
+
+                {/* Arrow */}
+                <div className="hidden sm:flex items-center justify-center">
+                  <svg className="w-8 h-8 text-brand-blue/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </div>
+
+                {/* Step 4: Progress */}
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-brand-orange flex items-center justify-center mb-3 shadow-soft">
+                    <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                  </div>
+                  <p className="font-bold text-brand-navy text-sm mb-1">4. Track progress</p>
+                  <p className="text-xs text-text-secondary">Watch confidence grow</p>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Perfect For - Enhanced Badges Section */}
+        {bundle && bundle.idealFor && bundle.idealFor.length > 0 && (
+          <section className="mt-12 sm:mt-16">
+            <h2 className="text-2xl font-bold text-brand-navy mb-6">
+              Perfect for
+            </h2>
+            <div className="flex flex-wrap gap-3">
+              {bundle.idealFor.map((tag, index) => {
+                const iconColors = [
+                  { bg: 'bg-brand-purple-light', text: 'text-brand-purple', border: 'border-brand-purple/20' },
+                  { bg: 'bg-brand-green-light', text: 'text-brand-green', border: 'border-brand-green/20' },
+                  { bg: 'bg-brand-orange-light', text: 'text-brand-orange', border: 'border-brand-orange/20' },
+                ];
+                const scheme = iconColors[index % iconColors.length];
+
+                return (
+                  <div
+                    key={tag}
+                    className={`inline-flex items-center gap-2 rounded-full ${scheme.bg} ${scheme.text} px-4 py-2 text-sm font-medium border ${scheme.border}`}
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    {tag}
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        )}
+
+        {/* Mission Link Card */}
+        {mission && missionColors && product.missionSlug && (
+          <section className="mt-12 sm:mt-16">
+            <div className={`rounded-2xl ${missionColors.bgLight} border ${missionColors.border} p-6 sm:p-8`}>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
+                <div className={`flex-shrink-0 w-14 h-14 rounded-2xl ${missionColors.bg} flex items-center justify-center shadow-soft`}>
+                  <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-bold text-brand-navy mb-1">
+                    {mission.label}
+                  </h3>
+                  <p className="text-sm text-text-secondary mb-3">
+                    {mission.tagline}
+                  </p>
+                  <Link
+                    href={`/missions/${product.missionSlug}`}
+                    className={`inline-flex items-center text-sm font-semibold ${missionColors.text} hover:underline`}
+                  >
+                    Learn more about this mission
+                    <svg className="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* You May Also Like Section */}
         <div className="mt-16">
